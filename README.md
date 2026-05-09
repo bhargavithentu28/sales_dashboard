@@ -86,3 +86,4 @@ The frontend will be available at `http://localhost:3000` (or whatever port Vite
 
 ---
 *Created using Antigravity AI Assistant.*
+ Vercel Link - https://frontend-gray-rho-42.vercel.app/
