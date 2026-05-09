@@ -1,5 +1,4 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
 
 const AuthContext = createContext();
 
@@ -19,53 +18,39 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
   const login = async (email, password) => {
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    // Mock login
+    setLoading(true);
+    setTimeout(() => {
+      const mockUser = {
+        _id: 'user_123',
+        name: email.split('@')[0],
+        email: email,
+        role: email === 'admin@salesvision.com' ? 'admin' : 'user',
+        token: 'mock_jwt_token',
       };
-
-      const { data } = await axios.post('/api/auth/login', { email, password }, config);
-
-      setUser(data);
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      return { success: true };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-      };
-    }
+      setUser(mockUser);
+      localStorage.setItem('userInfo', JSON.stringify(mockUser));
+      setLoading(false);
+    }, 800);
+    return { success: true };
   };
 
   const register = async (name, email, password) => {
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
+    // Mock register
+    setLoading(true);
+    setTimeout(() => {
+      const mockUser = {
+        _id: 'user_456',
+        name: name,
+        email: email,
+        role: 'user',
+        token: 'mock_jwt_token',
       };
-
-      const { data } = await axios.post(
-        '/api/auth/register',
-        { name, email, password },
-        config
-      );
-
-      setUser(data);
-      localStorage.setItem('userInfo', JSON.stringify(data));
-      return { success: true };
-    } catch (error) {
-      return {
-        success: false,
-        message: error.response && error.response.data.message
-          ? error.response.data.message
-          : error.message,
-      };
-    }
+      setUser(mockUser);
+      localStorage.setItem('userInfo', JSON.stringify(mockUser));
+      setLoading(false);
+    }, 800);
+    return { success: true };
   };
 
   const logout = () => {

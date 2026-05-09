@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { Package, Plus, Edit2, Trash2, ShieldAlert } from 'lucide-react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
@@ -16,15 +15,16 @@ const AdminPanel = () => {
   const { user } = useAuth();
 
   const fetchProducts = async () => {
-    try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      const { data } = await axios.get('/api/products', config);
-      setProducts(data);
-    } catch (error) {
-      console.error(error);
-    } finally {
+    // Mock Fetch
+    setTimeout(() => {
+      setProducts([
+        { _id: '1', productName: 'Premium Wireless Headphones', category: 'Electronics', price: 299.99, stock: 50 },
+        { _id: '2', productName: 'Ergonomic Office Chair', category: 'Furniture', price: 199.50, stock: 30 },
+        { _id: '3', productName: 'Smart Fitness Watch', category: 'Electronics', price: 149.99, stock: 100 },
+        { _id: '4', productName: 'Mechanical Keyboard', category: 'Electronics', price: 129.99, stock: 45 },
+      ]);
       setLoading(false);
-    }
+    }, 800);
   };
 
   useEffect(() => {
@@ -33,13 +33,8 @@ const AdminPanel = () => {
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
-      try {
-        const config = { headers: { Authorization: `Bearer ${user.token}` } };
-        await axios.delete(`/api/products/${id}`, config);
-        fetchProducts();
-      } catch (error) {
-        console.error(error);
-      }
+      // Mock Delete
+      setProducts(products.filter(p => p._id !== id));
     }
   };
 
@@ -56,20 +51,15 @@ const AdminPanel = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const config = { headers: { Authorization: `Bearer ${user.token}` } };
-      if (editingId) {
-        await axios.put(`/api/products/${editingId}`, formData, config);
-      } else {
-        await axios.post('/api/products', formData, config);
-      }
-      setIsModalOpen(false);
-      setFormData({ productName: '', category: '', price: 0, stock: 0 });
-      setEditingId(null);
-      fetchProducts();
-    } catch (error) {
-      console.error(error);
+    // Mock Submit
+    if (editingId) {
+      setProducts(products.map(p => p._id === editingId ? { ...p, ...formData } : p));
+    } else {
+      setProducts([...products, { _id: Date.now().toString(), ...formData }]);
     }
+    setIsModalOpen(false);
+    setFormData({ productName: '', category: '', price: 0, stock: 0 });
+    setEditingId(null);
   };
 
   if (loading) {

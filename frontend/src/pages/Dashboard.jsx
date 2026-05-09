@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { 
   LineChart, Line, AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, ResponsiveContainer,
   BarChart, Bar, PieChart, Pie, Cell, Legend
@@ -24,34 +23,43 @@ const Dashboard = () => {
   const { user } = useAuth();
 
   useEffect(() => {
-    const fetchDashboardData = async () => {
-      try {
-        const config = {
-          headers: {
-            Authorization: `Bearer ${user.token}`,
-          },
-        };
-
-        const [kpiRes, trendRes, regionRes, categoryRes] = await Promise.all([
-          axios.get('/api/analytics/kpi', config),
-          axios.get('/api/analytics/revenue-trend', config),
-          axios.get('/api/analytics/sales-by-region', config),
-          axios.get('/api/analytics/category-performance', config),
-        ]);
-
-        setKpiData(kpiRes.data);
-        setRevenueTrend(trendRes.data);
-        setSalesByRegion(regionRes.data);
-        setCategoryPerformance(categoryRes.data);
-      } catch (error) {
-        console.error("Failed to fetch dashboard data", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchDashboardData();
-  }, [user]);
+    // Mock Dashboard Data
+    setTimeout(() => {
+      setKpiData({
+        totalRevenue: 124500,
+        totalOrders: 1450,
+        averageOrderValue: 85.50,
+        monthlyGrowth: 12.5,
+        activeCustomers: 2405
+      });
+      
+      setRevenueTrend([
+        { name: 'Jan', revenue: 4000 },
+        { name: 'Feb', revenue: 3000 },
+        { name: 'Mar', revenue: 2000 },
+        { name: 'Apr', revenue: 2780 },
+        { name: 'May', revenue: 1890 },
+        { name: 'Jun', revenue: 2390 },
+        { name: 'Jul', revenue: 3490 },
+      ]);
+      
+      setSalesByRegion([
+        { name: 'North America', value: 400 },
+        { name: 'Europe', value: 300 },
+        { name: 'Asia', value: 300 },
+        { name: 'South America', value: 200 }
+      ]);
+      
+      setCategoryPerformance([
+        { name: 'Electronics', value: 400 },
+        { name: 'Furniture', value: 300 },
+        { name: 'Accessories', value: 300 },
+        { name: 'Software', value: 200 }
+      ]);
+      
+      setLoading(false);
+    }, 1000);
+  }, []);
 
   const formatCurrency = (value) => {
     return new Intl.NumberFormat('en-US', {
